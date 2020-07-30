@@ -102,7 +102,7 @@ func (infra *OVInfrastructure) LoadServerHardwareList() ([]*ServerHardware, erro
 		expand := "all"
 		ServerList, err := ovc.GetServerHardwareList(filters, sort, start, count, expand)
 		if err == nil {
-			for j, rec := range ServerList.Members {
+			for _, rec := range ServerList.Members {
 				s := ServerHardware{}
 				s.Base = rec
 				s.Memory, _ = GetServerHardwareMemory(ovc, rec.UUID)        //запрос по памяти в сервере
@@ -123,7 +123,7 @@ func (infra *OVInfrastructure) LoadServerHardwareList() ([]*ServerHardware, erro
 			start = strconv.Itoa(i)
 			ServerList, err = ovc.GetServerHardwareList(filters, sort, start, count, expand)
 			if err == nil {
-				for j, rec := range ServerList.Members {
+				for _, rec := range ServerList.Members {
 					s := ServerHardware{}
 					s.Base = rec
 					s.Memory, _ = GetServerHardwareMemory(ovc, rec.UUID)        //запрос по памяти в сервере
