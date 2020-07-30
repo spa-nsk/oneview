@@ -225,7 +225,6 @@ func GetServerHardwareLocalStorage(c *ov.OVClient, uuid utils.Nstring) (ServerHa
 	if err != nil {
 		return serverHardwareLocalStorage, err
 	}
-	fmt.Println(string(data))
 
 	if err := json.Unmarshal([]byte(data), &serverHardwareLocalStorage); err != nil {
 		return serverHardwareLocalStorage, err
