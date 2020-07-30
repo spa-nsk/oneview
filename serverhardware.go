@@ -2,7 +2,6 @@ package oneview
 
 import (
 	"encoding/json"
-	"fmt"
 	"time"
 
 	"github.com/HewlettPackard/oneview-golang/ov"
@@ -214,7 +213,6 @@ func GetServerHardwareLocalStorage(c *ov.OVClient, uuid utils.Nstring) (ServerHa
 	//	var hardware ServerHardware
 	var (
 		serverHardwareLocalStorage ServerHardwareLocalStorage
-		dataStorage                []LocalStorage
 	)
 	// refresh login
 	c.RefreshLogin()
@@ -229,16 +227,5 @@ func GetServerHardwareLocalStorage(c *ov.OVClient, uuid utils.Nstring) (ServerHa
 	if err := json.Unmarshal([]byte(data), &serverHardwareLocalStorage); err != nil {
 		return serverHardwareLocalStorage, err
 	}
-	dataStorage = make([]LocalStorage, 0)
-	for _, rec := range serverHardwareLocalStorage.Data {
-		if true {
-			storage := LocalStorage{}
-			storage = rec
-			dataStorage = append(dataStorage, storage)
-		}
-	}
-	serverHardwareLocalStorage.Data = dataStorage
-	serverHardwareLocalStorage.Count = len(dataStorage)
-	//	return hardware, nil
 	return serverHardwareLocalStorage, nil
 }
