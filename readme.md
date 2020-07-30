@@ -26,6 +26,7 @@ type OVInfrastructure struct {
 func (infra *OVInfrastructure) FindServerHardwareSN(sn string) (*ServerHardware, error)
 ```
 Пример использования
+
 ```
 package main
 import (
@@ -45,4 +46,5 @@ func main() {
 		}
 	}
 }
+
 ```
