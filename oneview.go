@@ -102,7 +102,6 @@ func (infra *OVInfrastructure) LoadServerHardwareList() ([]*ServerHardware, erro
 		expand := "all"
 		ServerList, err := ovc.GetServerHardwareList(filters, sort, start, count, expand)
 		if err == nil {
-			fmt.Println("Total server list :", ServerList.Total)
 			for j, rec := range ServerList.Members {
 				s := ServerHardware{}
 				s.Base = rec
@@ -110,7 +109,6 @@ func (infra *OVInfrastructure) LoadServerHardwareList() ([]*ServerHardware, erro
 				s.Storage, _ = GetServerHardwareLocalStorage(ovc, rec.UUID) //запрос по локальным хранилищам
 				infra.Servers = append(infra.Servers, &s)
 				infra.ServersCount++
-				fmt.Println(j, "Name", rec.Name, "SN:", rec.SerialNumber)
 
 			}
 		} else {
@@ -132,7 +130,6 @@ func (infra *OVInfrastructure) LoadServerHardwareList() ([]*ServerHardware, erro
 					s.Storage, _ = GetServerHardwareLocalStorage(ovc, rec.UUID) //запрос по локальным хранилищам
 					infra.Servers = append(infra.Servers, &s)
 					infra.ServersCount++
-					fmt.Println(i+j, "Name", rec.Name, "SN:", rec.SerialNumber)
 				}
 			} else {
 				fmt.Println("Failed to fetch server List : ", err)
