@@ -123,9 +123,8 @@ type EnvironmentalConfiguration struct {
 
 // GetServerHardwareMemory gets a server hardware with uri
 func GetServerEnvConfig(c *ov.OVClient, uuid utils.Nstring) (EnvironmentalConfiguration, error) {
-	var (
-		EnvironmentalConfiguration envConf
-	)
+	var EnvironmentalConfiguration envConf
+
 	// refresh login
 	c.RefreshLogin()
 	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
