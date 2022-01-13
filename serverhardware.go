@@ -2,6 +2,7 @@ package oneview
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/HewlettPackard/oneview-golang/ov"
@@ -93,9 +94,38 @@ func GetServerHardwareMemory(c *ov.OVClient, uuid utils.Nstring) (ServerHardware
 	return serverHardwareMemory, nil
 }
 
-// GetServerHardwareMemory gets a server hardware with uri
-func GetServerEnvConfig(c *ov.OVClient, uuid utils.Nstring) error {
+type EnvironmentalConfiguration struct {
+	PowerHistorySupported        bool   `json:"powerHistorySupported"`
+	ThermalHistorySupported      bool   `json:"thermalHistorySupported"`
+	UtilizationHistorySupported  bool   `json:"utilizationHistorySupported"`
+	CapHistorySupported          bool   `json:"capHistorySupported"`
+	HistorySampleIntervalSeconds int    `json:"historySampleIntervalSeconds"`
+	HistoryBufferSize            int    `json:"historyBufferSize"`
+	PowerCapType                 string `json:"powerCapType"`
+	IdleMaxPower                 int    `json:"idleMaxPower"`
+	CalibratedMaxPower           int    `json:"calibratedMaxPower"`
+	PsuList                      []struct {
+		Capacity     int    `json:"capacity"`
+		PsuID        int    `json:"psuId"`
+		InputVoltage int    `json:"inputVoltage"`
+		Side         string `json:"side"`
+		PowerType    string `json:"powerType"`
+	} `json:"psuList"`
+	Height             int         `json:"height"`
+	RackID             interface{} `json:"rackId"`
+	USlot              int         `json:"uSlot"`
+	RackName           interface{} `json:"rackName"`
+	RelativeOrder      int         `json:"relativeOrder"`
+	RackModel          string      `json:"rackModel"`
+	LicenseRequirement string      `json:"licenseRequirement"`
+	RackUHeight        int         `json:"rackUHeight"`
+}
 
+// GetServerHardwareMemory gets a server hardware with uri
+func GetServerEnvConfig(c *ov.OVClient, uuid utils.Nstring) (EnvironmentalConfiguration, error) {
+	var (
+		EnvironmentalConfiguration envConf
+	)
 	// refresh login
 	c.RefreshLogin()
 	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
@@ -103,15 +133,15 @@ func GetServerEnvConfig(c *ov.OVClient, uuid utils.Nstring) error {
 	// rest call
 	data, err := c.RestAPICall(rest.GET, "/rest/server-hardware/"+uuid.String()+"/environmentalConfiguration", nil)
 	if err != nil {
-		return err
+		return envConf, err
 	}
-	_ = data
-	/*
-		if err := json.Unmarshal([]byte(data), &serverHardwareMemory); err != nil {
-			return err
-		}
-	*/
-	return nil
+	fmt.Println((string)(data))
+
+	if err := json.Unmarshal([]byte(data), &envConf); err != nil {
+		return envConf, err
+	}
+
+	return envConf, nil
 }
 
 //CacheModuleStatus  - Health состояние модуля кэша "OK" при наличие и нормально состоянии, если отсутствует то ""

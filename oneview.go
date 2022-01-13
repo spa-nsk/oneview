@@ -138,7 +138,7 @@ func (infra *OVInfrastructure) LoadServerHardwareList() ([]*ServerHardware, erro
 		for _, srv := range infra.Servers {
 			srvHardware, err := ovc.GetServerHardwareByUri(srv.Base.URI)
 			ilo := srvHardware.GetIloIPAddress()
-			ovc.GetServerEnvConfig(srv.Base.UUID)
+			GetServerEnvConfig(ovc, srv.Base.UUID)
 			mpHostName := srvHardware.MpHostInfo.MpHostName
 			fmt.Println(ilo, mpHostName)
 			_ = err
