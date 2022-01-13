@@ -93,6 +93,27 @@ func GetServerHardwareMemory(c *ov.OVClient, uuid utils.Nstring) (ServerHardware
 	return serverHardwareMemory, nil
 }
 
+// GetServerHardwareMemory gets a server hardware with uri
+func GetServerEnvConfig(c *ov.OVClient, uuid utils.Nstring) error {
+
+	// refresh login
+	c.RefreshLogin()
+	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
+
+	// rest call
+	data, err := c.RestAPICall(rest.GET, "/rest/server-hardware/"+uuid.String()+"/environmentalConfiguration", nil)
+	if err != nil {
+		return err
+	}
+	_ = data
+	/*
+		if err := json.Unmarshal([]byte(data), &serverHardwareMemory); err != nil {
+			return err
+		}
+	*/
+	return nil
+}
+
 //CacheModuleStatus  - Health состояние модуля кэша "OK" при наличие и нормально состоянии, если отсутствует то ""
 type CacheModuleStatus struct {
 	Health string `json:"Health"`
