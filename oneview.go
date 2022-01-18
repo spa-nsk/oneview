@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/HewlettPackard/oneview-golang/ov"
 )
@@ -93,7 +94,7 @@ func (infra *OVInfrastructure) LoadServerHardwareList() ([]*ServerHardware, erro
 			endpoint.domain,
 			endpoint.endpoint,
 			false,
-			1600,
+			3000,
 			"*")
 		filters := []string{""}
 		sort := ""
@@ -138,9 +139,21 @@ func (infra *OVInfrastructure) LoadServerHardwareList() ([]*ServerHardware, erro
 		for _, srv := range infra.Servers {
 			srvHardware, err := ovc.GetServerHardwareByUri(srv.Base.URI)
 			ilo := srvHardware.GetIloIPAddress()
-			GetServerEnvConfig(ovc, srv.Base.UUID)
+			envConf, err := GetServerEnvConfig(ovc, srv.Base.UUID)
+			LoadDatcenterList(ovc, "", "", "", "")
 			mpHostName := srvHardware.MpHostInfo.MpHostName
-			fmt.Println(ilo, mpHostName)
+
+			if srvHardware.LocationURI != "" { //для корзин
+				encHardware, _ := GetServerEnclosure(ovc, srvHardware.LocationURI)
+				_ = encHardware
+				sso, _ := GetServerILOssoUrl(ovc, srvHardware.UUID)
+				java, _ := GetServerjavaRemoteConsoleUrl(ovc, srvHardware.UUID)
+				_ = sso
+				_ = java
+			} else {
+				mpHostName = strings.Split(mpHostName, "ILO-")[1]
+			}
+			fmt.Println(ilo, mpHostName, envConf.PowerCapType)
 			_ = err
 		}
 	}

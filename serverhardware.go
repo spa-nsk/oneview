@@ -123,7 +123,7 @@ type EnvironmentalConfiguration struct {
 
 // GetServerHardwareMemory gets a server hardware with uri
 func GetServerEnvConfig(c *ov.OVClient, uuid utils.Nstring) (EnvironmentalConfiguration, error) {
-	var EnvironmentalConfiguration envConf
+	var envConf EnvironmentalConfiguration
 
 	// refresh login
 	c.RefreshLogin()
@@ -134,7 +134,6 @@ func GetServerEnvConfig(c *ov.OVClient, uuid utils.Nstring) (EnvironmentalConfig
 	if err != nil {
 		return envConf, err
 	}
-	fmt.Println((string)(data))
 
 	if err := json.Unmarshal([]byte(data), &envConf); err != nil {
 		return envConf, err
@@ -278,4 +277,267 @@ func GetServerHardwareLocalStorage(c *ov.OVClient, uuid utils.Nstring) (ServerHa
 		return serverHardwareLocalStorage, err
 	}
 	return serverHardwareLocalStorage, nil
+}
+
+type Enclosure struct {
+	Type                 string      `json:"type"`
+	URI                  string      `json:"uri"`
+	Category             string      `json:"category"`
+	ETag                 time.Time   `json:"eTag"`
+	Created              time.Time   `json:"created"`
+	Modified             time.Time   `json:"modified"`
+	RefreshState         string      `json:"refreshState"`
+	StateReason          string      `json:"stateReason"`
+	EnclosureType        string      `json:"enclosureType"`
+	EnclosureTypeURI     string      `json:"enclosureTypeUri"`
+	EnclosureModel       string      `json:"enclosureModel"`
+	UUID                 string      `json:"uuid"`
+	SerialNumber         string      `json:"serialNumber"`
+	PartNumber           string      `json:"partNumber"`
+	ReconfigurationState string      `json:"reconfigurationState"`
+	UIDState             interface{} `json:"uidState"`
+	LicensingIntent      string      `json:"licensingIntent"`
+	DeviceBayCount       int         `json:"deviceBayCount"`
+	DeviceBays           []struct {
+		Type                                    string      `json:"type"`
+		BayNumber                               int         `json:"bayNumber"`
+		Model                                   interface{} `json:"model"`
+		DevicePresence                          string      `json:"devicePresence"`
+		ProfileURI                              interface{} `json:"profileUri"`
+		DeviceURI                               string      `json:"deviceUri"`
+		CoveredByProfile                        interface{} `json:"coveredByProfile"`
+		CoveredByDevice                         string      `json:"coveredByDevice"`
+		Ipv4Setting                             interface{} `json:"ipv4Setting"`
+		Ipv6Setting                             interface{} `json:"ipv6Setting"`
+		URI                                     string      `json:"uri"`
+		Category                                string      `json:"category"`
+		ETag                                    interface{} `json:"eTag"`
+		Created                                 interface{} `json:"created"`
+		Modified                                interface{} `json:"modified"`
+		AvailableForHalfHeightProfile           bool        `json:"availableForHalfHeightProfile"`
+		AvailableForFullHeightProfile           bool        `json:"availableForFullHeightProfile"`
+		DeviceBayType                           string      `json:"deviceBayType"`
+		DeviceFormFactor                        string      `json:"deviceFormFactor"`
+		BayPowerState                           string      `json:"bayPowerState"`
+		ChangeState                             string      `json:"changeState"`
+		AvailableForHalfHeightDoubleWideProfile bool        `json:"availableForHalfHeightDoubleWideProfile"`
+		AvailableForFullHeightDoubleWideProfile bool        `json:"availableForFullHeightDoubleWideProfile"`
+		UUID                                    interface{} `json:"uuid"`
+	} `json:"deviceBays"`
+	InterconnectBayCount int `json:"interconnectBayCount"`
+	InterconnectBays     []struct {
+		BayNumber              int         `json:"bayNumber"`
+		InterconnectURI        string      `json:"interconnectUri"`
+		LogicalInterconnectURI interface{} `json:"logicalInterconnectUri"`
+		InterconnectModel      string      `json:"interconnectModel"`
+		Ipv4Setting            interface{} `json:"ipv4Setting"`
+		Ipv6Setting            interface{} `json:"ipv6Setting"`
+		SerialNumber           string      `json:"serialNumber"`
+		InterconnectBayType    string      `json:"interconnectBayType"`
+		ChangeState            string      `json:"changeState"`
+		BayPowerState          string      `json:"bayPowerState"`
+	} `json:"interconnectBays"`
+	FanBayCount int `json:"fanBayCount"`
+	FanBays     []struct {
+		BayNumber       int    `json:"bayNumber"`
+		DevicePresence  string `json:"devicePresence"`
+		DeviceRequired  bool   `json:"deviceRequired"`
+		Status          string `json:"status"`
+		Model           string `json:"model"`
+		PartNumber      string `json:"partNumber"`
+		SparePartNumber string `json:"sparePartNumber"`
+		FanBayType      string `json:"fanBayType"`
+		ChangeState     string `json:"changeState"`
+		State           string `json:"state"`
+	} `json:"fanBays"`
+	PowerSupplyBayCount int `json:"powerSupplyBayCount"`
+	PowerSupplyBays     []struct {
+		BayNumber          int    `json:"bayNumber"`
+		DevicePresence     string `json:"devicePresence"`
+		Status             string `json:"status"`
+		Model              string `json:"model"`
+		SerialNumber       string `json:"serialNumber"`
+		PartNumber         string `json:"partNumber"`
+		SparePartNumber    string `json:"sparePartNumber"`
+		PowerSupplyBayType string `json:"powerSupplyBayType"`
+		ChangeState        string `json:"changeState"`
+	} `json:"powerSupplyBays"`
+	EnclosureGroupURI    interface{} `json:"enclosureGroupUri"`
+	FwBaselineURI        interface{} `json:"fwBaselineUri"`
+	FwBaselineName       interface{} `json:"fwBaselineName"`
+	IsFwManaged          bool        `json:"isFwManaged"`
+	ForceInstallFirmware bool        `json:"forceInstallFirmware"`
+	LogicalEnclosureURI  interface{} `json:"logicalEnclosureUri"`
+	ManagerBays          []struct {
+		BayNumber      int           `json:"bayNumber"`
+		ManagerType    string        `json:"managerType"`
+		UIDState       interface{}   `json:"uidState"`
+		BayPowerState  string        `json:"bayPowerState"`
+		FwVersion      string        `json:"fwVersion"`
+		DevicePresence string        `json:"devicePresence"`
+		Role           string        `json:"role"`
+		IPAddress      string        `json:"ipAddress"`
+		ChangeState    string        `json:"changeState"`
+		FwBuildDate    string        `json:"fwBuildDate"`
+		DhcpIpv6Enable bool          `json:"dhcpIpv6Enable"`
+		Ipv6Addresses  []interface{} `json:"ipv6Addresses"`
+		FqdnHostName   string        `json:"fqdnHostName"`
+		DhcpEnable     bool          `json:"dhcpEnable"`
+	} `json:"managerBays"`
+	SupportState               string `json:"supportState"`
+	SupportDataCollectionState string `json:"supportDataCollectionState"`
+	SupportDataCollectionType  string `json:"supportDataCollectionType"`
+	SupportDataCollectionsURI  string `json:"supportDataCollectionsUri"`
+	RemoteSupportURI           string `json:"remoteSupportUri"`
+	RemoteSupportSettings      struct {
+		RemoteSupportCurrentState string `json:"remoteSupportCurrentState"`
+		Destination               string `json:"destination"`
+	} `json:"remoteSupportSettings"`
+	CrossBars            []interface{} `json:"crossBars"`
+	Partitions           []interface{} `json:"partitions"`
+	ScopesURI            string        `json:"scopesUri"`
+	Status               string        `json:"status"`
+	Name                 string        `json:"name"`
+	State                string        `json:"state"`
+	Description          interface{}   `json:"description"`
+	StandbyOaPreferredIP string        `json:"standbyOaPreferredIP"`
+	ActiveOaPreferredIP  string        `json:"activeOaPreferredIP"`
+	AssetTag             string        `json:"assetTag"`
+	RackName             string        `json:"rackName"`
+	VcmDomainID          string        `json:"vcmDomainId"`
+	VcmDomainName        string        `json:"vcmDomainName"`
+	VcmMode              bool          `json:"vcmMode"`
+	VcmURL               string        `json:"vcmUrl"`
+	OaBays               int           `json:"oaBays"`
+	MigrationState       string        `json:"migrationState"`
+}
+
+func GetServerEnclosure(c *ov.OVClient, encuri utils.Nstring) (Enclosure, error) {
+
+	var (
+		encHardware Enclosure
+	)
+
+	// refresh login
+	c.RefreshLogin()
+	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
+
+	// rest call
+	data, err := c.RestAPICall(rest.GET, encuri.String(), nil)
+	if err != nil {
+		return encHardware, err
+	}
+
+	if err := json.Unmarshal([]byte(data), &encHardware); err != nil {
+		return encHardware, err
+	}
+	return encHardware, nil
+}
+
+type ServerSSOUrl struct {
+	IloSsoURL string `json:"iloSsoUrl"`
+}
+
+func GetServerILOssoUrl(c *ov.OVClient, uuid utils.Nstring) (string, error) {
+
+	var ssoILOUrl ServerSSOUrl
+	// refresh login
+	c.RefreshLogin()
+	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
+
+	// rest call
+	data, err := c.RestAPICall(rest.GET, "/rest/server-hardware/"+uuid.String()+"/iloSsoUrl", nil)
+	if err != nil {
+		return ssoILOUrl.IloSsoURL, err
+	}
+
+	fmt.Println(string(data))
+
+	if err := json.Unmarshal([]byte(data), &ssoILOUrl); err != nil {
+		return ssoILOUrl.IloSsoURL, err
+	}
+
+	return ssoILOUrl.IloSsoURL, nil
+}
+
+type ServerjavaRemoteConsoleUrl struct {
+	JavaRemoteConsoleUrl string `json:"javaRemoteConsoleUrl"`
+}
+
+func GetServerjavaRemoteConsoleUrl(c *ov.OVClient, uuid utils.Nstring) (string, error) {
+
+	var javaILOUrl ServerjavaRemoteConsoleUrl
+	// refresh login
+	c.RefreshLogin()
+	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
+
+	// rest call
+	data, err := c.RestAPICall(rest.GET, "/rest/server-hardware/"+uuid.String()+"/javaRemoteConsoleUrl", nil)
+	if err != nil {
+		return javaILOUrl.JavaRemoteConsoleUrl, err
+	}
+
+	fmt.Println(string(data))
+
+	if err := json.Unmarshal([]byte(data), &javaILOUrl); err != nil {
+		return javaILOUrl.JavaRemoteConsoleUrl, err
+	}
+
+	return javaILOUrl.JavaRemoteConsoleUrl, nil
+}
+
+type DatacentersList struct {
+}
+
+// LoadDatcenterList
+func (infra *OVInfrastructure) LoadDatcenterList(c *ov.OVClient, filters []string, sort string, start string, count string) (DatacentersList, error) {
+	var (
+		uri         = "/rest/datacenters"
+		q           map[string]interface{}
+		datacenters DatacentersList
+	)
+	q = make(map[string]interface{})
+
+	if len(filters) > 0 {
+		q["filter"] = filters
+	}
+
+	if sort != "" {
+		q["sort"] = sort
+	}
+
+	if start != "" {
+		q["start"] = start
+	}
+
+	if count != "" {
+		q["count"] = count
+	}
+	// refresh login
+	c.RefreshLogin()
+	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
+
+	data, err := c.RestAPICall(rest.GET, uri, nil, q)
+	if err != nil {
+		return datacenters, err
+	}
+
+	fmt.Println(string(data))
+	/*
+		if err := json.Unmarshal([]byte(data), &datacenters); err != nil {
+			return datacenters, err
+		}
+	*/
+	/*
+		if count == "" {
+			total := strconv.Itoa(serverlist.Total)
+			return c.GetServerHardwareList(filters, "", "", total, "")
+		}
+
+		for i := 0; i < serverlist.Count; i++ {
+			serverlist.Members[i].Client = c
+		}
+	*/
+	return datacenters, nil
+
 }
